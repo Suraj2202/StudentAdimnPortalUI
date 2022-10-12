@@ -18,6 +18,7 @@ export class StudentsComponent implements OnInit {
   @ViewChild(MatPaginator) matPaginator !: MatPaginator;
   @ViewChild(MatSort) matSort !: MatSort;
   filterString = '';
+  
   constructor(private studentService : StudentService) { }
 
   ngOnInit(): void {

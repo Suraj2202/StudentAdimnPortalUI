@@ -73,7 +73,11 @@
               <mat-label>
                 Gender
               </mat-label>
-              <input type="text" matInput  [(ngModel)]= "student.gender.description" name= "description">
+              <mat-select [(ngModel)]= "student.genderId" name= "gender">
+                <mat-option *ngFor="let gender of genderList" [value]="gender.id">
+                    {{gender.description }}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
         </div>
@@ -96,6 +100,12 @@
               </mat-label>
               <textarea matInput  [(ngModel)]= "student.address.postalAddress" name= "postalAddress"></textarea>
             </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-cs">
+            <button mat-raised-button color="primary" (click)="onUpdate()">Save</button>
           </div>
         </div>
       </form>
