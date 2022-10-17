@@ -33,6 +33,10 @@ export class ViewStudentComponent implements OnInit {
       postalAddress: ''
     }
   };
+
+  isNewStudent = false;
+  header = '';
+
   genderList: Gender[] = [];
 
   constructor(private readonly studentService: StudentService,
@@ -46,22 +50,37 @@ export class ViewStudentComponent implements OnInit {
     this.route.paramMap.subscribe(
       (params) => {
         this.studentId = params.get('id');
-        if(this.studentId)
+
+        let Add = 'Add';
+        if(this.studentId) {
+
+          if(this.studentId.toLocaleLowerCase() === Add.toLocaleLowerCase()){
+            this.isNewStudent = true;
+            this.header = 'Add New Student'
+
+
+          }
+
+          else{
+
+            this.isNewStudent = false;
+            this.header = 'Edit Student'
             this.studentService.getStudent(this.studentId)
-                .subscribe(
-                (successResponse) => {
-                  this.student = successResponse ;
-                  console.log(successResponse);
-                }
-                );
+            .subscribe(
+            (successResponse) => {
+              this.student = successResponse;
+            }
+            );
+
+          }
 
                 this.genderService.getGenderList()
                 .subscribe(
                   (successResponse) =>{
                     this.genderList = successResponse;
-                      console.log(successResponse);
                   }
                 );
+        }
       }
     );
   }
@@ -97,5 +116,42 @@ export class ViewStudentComponent implements OnInit {
         (errorResponse) => {
 
         })
+  }
+
+  onAdd(): void{
+    this.studentService.addStudent(this.student)
+      .subscribe(
+        (successResponse) => {
+          this.snackbar.open(this.student.firstName + ' added Successfully', undefined, {
+            duration: 2000
+          });
+
+          setTimeout(() => {
+            this.student = {
+              id: '',
+            firstName: '',
+            lastName: '',
+            dateOfBirth: '',
+            email: '',
+            mobile: 0,
+            profileImageUrl: '',
+            genderId: '',
+            gender: {
+              id: '',
+              description: ''
+            },
+            address: {
+              id: '',
+              physicalAddress: '',
+              postalAddress: ''
+            }
+            };
+          }, 2000);
+        },
+        (errorResponse) => {
+
+        }
+      )
+
   }
 }
